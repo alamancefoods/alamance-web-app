@@ -1,20 +1,25 @@
-import React, {useState, useEffect } from 'react';
+import React from 'react';
+import { useFetch } from "../hooks/useFetch"
 import { itemListRequest } from '../../utils/tritonListRequests'
 
 const ItemListComponent = () => {
+  const [data, loading] = useFetch(itemListRequest)
+  console.log(data)
+  console.log(loading)
 
-  //useEffect(() => {
-   // const result = itemListRequest
-  //}, []);
-  let itemList = []
-  itemList = itemListRequest
-  console.log(itemList)
-  const itemNumberList = itemList.number.map((item) =>
-    <li>{item.number}</li>
+  return (
+    <div>
+      {loading ? (
+        "Loading..."
+      ) : (
+        <div>
+          <h1>Hiya There!</h1>
+          <h2>Item Number {data[0].number}</h2>
+        </div>
+      )
+       }
+    </div>
   )
-    return (
-      <ul>{itemNumberList}</ul>
-    )
 }
 
 export default ItemListComponent;

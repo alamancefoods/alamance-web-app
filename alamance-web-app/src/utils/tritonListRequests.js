@@ -1,9 +1,9 @@
-import { tritonRequest }  from './baseRequests'
+import { tritonURL } from './rootURLs'
 
-export const itemListRequest = tritonRequest("/item/")
+export const itemListRequest = tritonURL.concat("/item/")
 
-export const employeeListRequest = tritonRequest("/employee/")
+export const employeeListRequest = tritonURL.concat("/employee/")
 
-export const shiftListRequest = tritonRequest("/shift/")
+export const shiftListRequest = tritonURL.concat("/shift/")
 
-export const machineListRequest = tritonRequest("/shift/")
+export const machineListRequest = tritonURL.concat("/shift/")

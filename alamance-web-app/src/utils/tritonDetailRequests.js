@@ -1,25 +1,33 @@
-import { tritonRequest } from './baseRequests'
+import { tritonURL } from './rootURLS'
 
 export const itemDetailRequest = (pk) => {
-  return (
-    tritonRequest(`/item/${pk}`)
+  let endpoint = `/item/${pk}`
+  let requestURI = tritonURL.concat(endpoint)
+  return(
+    requestURI
   )
 }
 
 export const employeeDetailRequest = (pk) => {
+  let endpoint = `/employee/${pk}`
+  let requestURI = tritonURL.concat(endpoint)
   return (
-    tritonRequest(`/employee/${pk}`)
+    requestURI
   )
 }
 
 export const ShiftDetailRequest = (pk) => {
+  let endpoint = `/shift/${pk}`
+  let requestURI = tritonURL.concat(endpoint)
   return (
-    tritonRequest(`/shift/${pk}`)
+    requestURI
   )
 }
 
 export const MachineDetailRequest = (pk) => {
+  let endpoint = `/employee/${pk}`
+  let requestURI = tritonURL.concat(endpoint)
   return (
-    tritonRequest(`/machine/${pk}`)
+    requestURI
   )
 }

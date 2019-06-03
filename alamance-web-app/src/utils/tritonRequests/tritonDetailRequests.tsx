@@ -1,6 +1,6 @@
-import { tritonURL } from './rootURLS'
+import { tritonURL } from '../rootURLs'
 
-export const itemDetailRequest = (pk) => {
+export const itemDetailRequest = (pk: number) => {
   let endpoint = `/item/${pk}`
   let requestURI = tritonURL.concat(endpoint)
   return(
@@ -8,7 +8,7 @@ export const itemDetailRequest = (pk) => {
   )
 }
 
-export const employeeDetailRequest = (pk) => {
+export const employeeDetailRequest = (pk: number) => {
   let endpoint = `/employee/${pk}`
   let requestURI = tritonURL.concat(endpoint)
   return (
@@ -16,7 +16,7 @@ export const employeeDetailRequest = (pk) => {
   )
 }
 
-export const ShiftDetailRequest = (pk) => {
+export const ShiftDetailRequest = (pk: number) => {
   let endpoint = `/shift/${pk}`
   let requestURI = tritonURL.concat(endpoint)
   return (
@@ -24,7 +24,7 @@ export const ShiftDetailRequest = (pk) => {
   )
 }
 
-export const MachineDetailRequest = (pk) => {
+export const MachineDetailRequest = (pk: number) => {
   let endpoint = `/employee/${pk}`
   let requestURI = tritonURL.concat(endpoint)
   return (

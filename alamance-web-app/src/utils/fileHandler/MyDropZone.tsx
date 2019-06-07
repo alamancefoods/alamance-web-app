@@ -1,12 +1,15 @@
 import React, { useCallback, useState } from 'react'
+import { PaContainer } from './PaContainer'
 import {paDeficitRequest} from '../pallasRequests/paDeficitRequest'
 import {fileUpload} from './fileUpload'
 import {useDropzone} from 'react-dropzone'
 
 function MyDropZone() {
-  const [fileNames, setFileNames] = useState<Array<string>>([])
+  const [allFileNames, setAllFileNames] = useState<Array<string>>([])
+  const [upFiles, setUpFiles] = useState<Array<File>>([])
+
   const onDrop = useCallback(acceptedFiles => {
-    fileUpload(paDeficitRequest, acceptedFiles[0]).then(body => setFileNames(fileNames => fileNames.concat(body.name)))
+    setUpFiles(upFiles => upFiles.concat(acceptedFiles))
   }, [])
 
 
@@ -22,11 +25,21 @@ function MyDropZone() {
           <p>Drag 'n' Drop some files here, or click to select files.</p>
         }
       </div>
-      <a href={`${paDeficitRequest}/${fileNames[0]}`}>
-        download
-      </a>
-      <p>{fileNames}</p>
+      {upFiles.length ?
+       upFiles.map((upFile, index) => {
+         return(
+           <PaContainer
+             fileToProcess={upFile}
+             setAllFileNames={setAllFileNames}
+             allFileNames={allFileNames}
+             key={index}
+           />
+         )
+       })
+      : null
+      }
     </div>
+
   )
 }
 

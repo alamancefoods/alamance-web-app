@@ -15,6 +15,7 @@ export const PaContainer = (
   const [downFileNames, setDownFileNames] = useState<Array<string>>([])
   const [formArray, pushToFormArray] = useState([<DeltaInput
                                                    index={1}
+                                                   timeDeltas={timeDeltas}
                                                    setTimeDeltas={setTimeDeltas}
                                                    downFileNames={downFileNames}
   />])
@@ -26,6 +27,7 @@ export const PaContainer = (
     const index: number = formCount
     pushToFormArray(formArray => formArray.concat(<DeltaInput
                                                     index={index}
+                                                    timeDeltas={timeDeltas}
                                                     setTimeDeltas={setTimeDeltas}
                                                     downFileNames={downFileNames}
     />))

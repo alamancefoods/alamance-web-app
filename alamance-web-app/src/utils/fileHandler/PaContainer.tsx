@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { DeltaInput } from './DeltaInput'
+import { PaForm } from './PaForm'
 import { paDeficitRequest } from '../pallasRequests/paDeficitRequest'
 import { fileUpload } from './fileUpload'
 
@@ -13,53 +13,75 @@ export const PaContainer = (
 ) => {
   const [timeDeltas, setTimeDeltas] = useState<Array<number>>([])
   const [downFileNames, setDownFileNames] = useState<Array<string>>([])
-  const [formArray, pushToFormArray] = useState([<DeltaInput
-                                                   index={1}
-                                                   timeDeltas={timeDeltas}
-                                                   setTimeDeltas={setTimeDeltas}
-                                                   downFileNames={downFileNames}
-  />])
-  const [formCount, updateFormCount] = useState(1)
+  const [formIndices, updateFormIndices] = useState([1])
+  const [isLoading, setIsLoading] = useState(false)
 
 
-  const formPusher = () => {
-    updateFormCount(formCount + 1)
-    const index: number = formCount
-    pushToFormArray(formArray => formArray.concat(<DeltaInput
-                                                    index={index}
-                                                    timeDeltas={timeDeltas}
-                                                    setTimeDeltas={setTimeDeltas}
-                                                    downFileNames={downFileNames}
-    />))
-    console.log(formCount)
-    console.log(timeDeltas.length)
+  const FormList = ({indices} : {indices: number[]}) => {
+    const paForms = indices.map((formIndex) =>
+      <PaForm
+        setDeltas = {setTimeDeltas}
+        deltas = {timeDeltas}
+        index = {formIndex}
+      />
+    )
+    return (
+      <div>{paForms}</div>
+    )
+  }
+
+  const DownloadList = ({files} : {files: string[]}) => {
+    const downloadList = files.map((fileName) =>
+      <a href = {paDeficitRequest.concat(`/${fileName}`)}>Download</a>
+    )
+    return(
+      <div>{downloadList}</div>
+    )
   }
 
   const handleUpload = () => {
+    setIsLoading(isloading => !isLoading)
+    let request: string = paDeficitRequest
     switch(timeDeltas.length) {
       case 0:
         break;
       case 1:
-        paDeficitRequest.concat(`?delta=${timeDeltas[0]}`)
+        request = paDeficitRequest.concat(`?delta=${timeDeltas[0]}`)
         break;
       default:
-        paDeficitRequest.concat(`?delta=${timeDeltas[0]}`)
+        request =paDeficitRequest.concat(`?delta=${timeDeltas[0]}`)
         timeDeltas.slice(1).forEach(function(delta){
-          paDeficitRequest.concat(`&delta=${delta}`)
+          request = request.concat(`&delta=${delta}`)
         });
     }
-    fileUpload(paDeficitRequest, fileToProcess)
-      .then(body => setDownFileNames(names => downFileNames.concat(body.names)))
-    setAllFileNames(names => allFileNames.concat(downFileNames))
+    fileUpload(request, fileToProcess)
+      .then(body => {
+        setDownFileNames(downFileNames => downFileNames.concat(body.names))
+        setIsLoading(false)
+      })
   }
 
 
   return(
     <div>
-      {formArray}
-      {formCount === timeDeltas.length ?
-       <button onClick={formPusher}>Would you like to make another forecast?</button> :
-       null
+      {timeDeltas.length > 0
+      ? <h4>Submitted Date Ranges</h4>
+      : null}
+      <FormList indices={formIndices}/>
+      {downFileNames.length > 0
+      ? <DownloadList files={downFileNames}/>
+      : isLoading
+      ? <h5>loading...</h5>
+      : null
+      }
+      {formIndices.length === timeDeltas.length
+       ?<button
+          onClick={() =>
+          updateFormIndices(formIndices =>
+          formIndices.concat(formIndices.slice(-1)[0] + 1))}>
+          Add Another Range
+        </button>
+       : null
       }
       <button onClick={handleUpload}
       >Process Files</button>

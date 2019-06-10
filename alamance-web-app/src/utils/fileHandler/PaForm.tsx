@@ -8,46 +8,53 @@ const PaProcessSchema = Yup.object().shape({
   .integer('Only whole numbers please.')
   .min(1, 'Zero is not an acceptable number.')
   .positive("Please provide a positive value.")
-  .lessThan(45, "Why don't we keep things around 45 days or less.")
+  .lessThan(46, "Why don't we keep things around 45 days or less.")
 });
 
 interface PaFormValues {
   timeDelta: number
 }
 
-export const PaForm = ({ setDeltas, deltas } :
-                       {
-                         setDeltas: React.Dispatch<React.SetStateAction<number[]>>,
-                         deltas: number[] }) => {
-const [isSubmitted, setSubmitted] = useState(false)
+export const PaForm = ({setDeltas, deltas, index } : {
+  setDeltas: React.Dispatch<React.SetStateAction<number[]>>,
+  deltas: number[],
+  index: number
+}) => {
+
+  const SubmittedValue = () => (
+    <h5>{deltas[index - 1]} days</h5>
+  )
+
+  const UnfilledForm = () => (
+    <Formik
+      initialValues={{
+        timeDelta: 30,
+      }}
+      validationSchema={PaProcessSchema}
+      onSubmit={(values: PaFormValues, actions: FormikActions<PaFormValues>)=> {
+        if(!deltas.includes(values.timeDelta)){
+          setDeltas(deltas => deltas.concat(values.timeDelta))
+        }else{
+          alert("You've already submitted that value!")
+        }
+      }}
+    >
+      {({ errors, touched }) => (
+        <Form>
+          <Field name="timeDelta" />
+          <ErrorMessage name="timeDelta"/>
+          <button type="submit">Submit</button>
+        </Form>
+      )}
+    </Formik>
+  )
 
   return (
     <div>
-      <Formik
-        initialValues={{
-          timeDelta: 30,
-        }}
-        validationSchema={PaProcessSchema}
-        onSubmit={(values: PaFormValues, actions: FormikActions<PaFormValues>)=> {
-          if(!deltas.includes(values.timeDelta)){
-            setDeltas(deltas => deltas.concat(values.timeDelta))
-            setSubmitted(isSubmitted => !isSubmitted)
-          }else{
-            alert("You've already submitted that value!")
-          }
-        }}
-      >
-      {({ errors, touched }) => (
-          <Form>
-            <Field name="timeDelta" />
-            <ErrorMessage name="timeDelta"/>
-            {!isSubmitted
-            ? <button type="submit">Submit</button>
-            : null
-            }
-          </Form>
-        )}
-      </Formik>
+      {index > deltas.length
+             ? <UnfilledForm />
+             : <SubmittedValue />
+      }
     </div>
   )
 }

@@ -16,6 +16,7 @@ export async function fizzleUpload(url: string, upFile: File) {
 export const fileUpload = async (url: string, upFile: File): Promise<any> => {
   let formData = new FormData();
   formData.append('file', upFile)
+  console.log(url)
   return await new Promise(resolve => {
     fetch(url, {
       method: 'POST',

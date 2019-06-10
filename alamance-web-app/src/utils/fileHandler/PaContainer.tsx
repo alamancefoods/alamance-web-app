@@ -15,6 +15,7 @@ export const PaContainer = (
   const [downFileNames, setDownFileNames] = useState<Array<string>>([])
   const [formIndices, updateFormIndices] = useState([1])
   const [isLoading, setIsLoading] = useState(false)
+  const [isDownloaded, setIsDownloaded] = useState(false)
 
 
   const FormList = ({indices} : {indices: number[]}) => {
@@ -32,7 +33,9 @@ export const PaContainer = (
 
   const DownloadList = ({files} : {files: string[]}) => {
     const downloadList = files.map((fileName) =>
-      <a href = {paDeficitRequest.concat(`/${fileName}`)}>Download</a>
+      <div>
+        <a href = {paDeficitRequest.concat(`/${fileName}`)}>{fileName}</a>
+      </div>
     )
     return(
       <div>{downloadList}</div>
@@ -40,6 +43,7 @@ export const PaContainer = (
   }
 
   const handleUpload = () => {
+    setIsDownloaded(isDownloaded => !isDownloaded)
     setIsLoading(isloading => !isLoading)
     let request: string = paDeficitRequest
     switch(timeDeltas.length) {
@@ -69,12 +73,12 @@ export const PaContainer = (
       : null}
       <FormList indices={formIndices}/>
       {downFileNames.length > 0
-      ? <DownloadList files={downFileNames}/>
+      ? <div><h4>Download:</h4><DownloadList files={downFileNames}/></div>
       : isLoading
       ? <h5>loading...</h5>
       : null
       }
-      {formIndices.length === timeDeltas.length
+      {formIndices.length === timeDeltas.length && !isDownloaded
        ?<button
           onClick={() =>
           updateFormIndices(formIndices =>
@@ -83,8 +87,10 @@ export const PaContainer = (
         </button>
        : null
       }
-      <button onClick={handleUpload}
-      >Process Files</button>
+      {!isDownloaded
+      ?<button onClick={handleUpload}>Process Files</button>
+      : null
+      }
     </div>
   )
 }

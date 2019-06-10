@@ -1,3 +1,3 @@
-import { pallasURL } from '../rootURLs'
+import { pallasURL, pallasServer } from '../rootURLs'
 
-export const paDeficitRequest: string = pallasURL.concat('/pa-deficits')
+export const paDeficitRequest: string = pallasServer.concat('/pa-deficits')

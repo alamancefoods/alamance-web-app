@@ -49,7 +49,7 @@ function MyDropZone() {
     {upFiles.length ?
      <div>
       <button onClick={() => setUpFiles(upFiles => upFiles = [] )}>Back</button>
-      <h1>Gather Product Availability Deficits For:</h1>  
+      <h1>Gather Product Availability Deficits For:</h1>
      </div>
      : null
      }

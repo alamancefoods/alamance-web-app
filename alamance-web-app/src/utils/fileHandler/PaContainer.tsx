@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { PaForm } from './PaForm'
 import { paDeficitRequest } from '../pallasRequests/paDeficitRequest'
 import { fileUpload } from './fileUpload'
+import { useKeycloak } from 'react-keycloak';
 
 export const PaContainer = (
   { fileToProcess, setAllFileNames, allFileNames }
@@ -16,6 +17,7 @@ export const PaContainer = (
   const [formIndices, updateFormIndices] = useState([1])
   const [isLoading, setIsLoading] = useState(false)
   const [isDownloaded, setIsDownloaded] = useState(false)
+  const [keycloak, authorization] = useKeycloak()
 
 
   const FormList = ({indices} : {indices: number[]}) => {
@@ -58,7 +60,7 @@ export const PaContainer = (
           request = request.concat(`&delta=${delta}`)
         });
     }
-    fileUpload(request, fileToProcess)
+    fileUpload(request, fileToProcess, keycloak)
       .then(body => {
         setDownFileNames(downFileNames => downFileNames.concat(body.names))
         setIsLoading(false)

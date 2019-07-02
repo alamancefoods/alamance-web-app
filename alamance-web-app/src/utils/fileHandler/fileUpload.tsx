@@ -1,4 +1,3 @@
-import { useState, useEffect } from 'react';
 
 export async function fizzleUpload(url: string, upFile: File) {
   let formData = new FormData();
@@ -13,14 +12,17 @@ export async function fizzleUpload(url: string, upFile: File) {
 }
 
 
-export const fileUpload = async (url: string, upFile: File): Promise<any> => {
+export const fileUpload = async (url: string, upFile: File, keycloak: Keycloak.KeycloakInstance): Promise<any> => {
   let formData = new FormData();
   formData.append('file', upFile)
-  console.log(url)
   return await new Promise(resolve => {
     fetch(url, {
       method: 'POST',
       body: formData,
+        headers: {
+            'Accept': 'application/json',
+            'Authorization': `Bearer ${keycloak.token}`
+        }
     })
       .then(response => response.json())
       .then(body => {

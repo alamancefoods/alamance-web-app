@@ -41,7 +41,10 @@ function MyDropZone() {
        {
          isDragActive ?
          <p>Drop your files here...</p> :
-         <p>Drag 'n' Drop some files here, or click to select files.</p>
+         <div>
+          <p>Drag & Drop your files here</p>
+          <p>Or click to select files.</p>
+         </div>
        }
      </div>
       : null

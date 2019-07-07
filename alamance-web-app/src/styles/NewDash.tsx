@@ -1,6 +1,7 @@
 import React from 'react';
 import clsx from 'clsx';
-import { createStyles, makeStyles, withStyles, useTheme, Theme } from '@material-ui/core/styles';
+import {  createMuiTheme, createStyles, makeStyles, withStyles, useTheme, Theme } from '@material-ui/core/styles';
+import { ThemeProvider } from '@material-ui/styles'
 import Menu, { MenuProps } from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import Button from '@material-ui/core/Button'
@@ -8,6 +9,8 @@ import Drawer from '@material-ui/core/Drawer';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import List from '@material-ui/core/List';
+import Paper from '@material-ui/core/Paper';
+import Grid from '@material-ui/core/Grid';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
@@ -26,11 +29,20 @@ import PeopleIcon from '@material-ui/icons/People';
 import SettingsIcon from '@material-ui/icons/Settings';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 
+import MyDropZone from '../utils/fileHandler/MyDropZone'
+
 const drawerWidth = 240;
+
+const theme = createMuiTheme({
+  palette: {
+    primary: {main: '#ff0000'},
+    secondary: { main: '#ff0000'},
+  },
+})
 
 const StyledProfileMenu = withStyles({
   paper: {
-    border: '1px solid #d3d4d5',
+    border: '1px solid #ff0000',
   },
 })((props: MenuProps) => (
   <Menu
@@ -51,9 +63,9 @@ const StyledProfileMenu = withStyles({
 const StyledProfileMenuItem = withStyles(theme => ({
   root: {
     '&:focus': {
-      backgroundColor: theme.palette.primary.main,
+      backgroundColor: '#ff0000',
       '& multiListItemIcon-root, & .MultiListItemText-primary': {
-        color: theme.palette.common.white,
+        color: '#ff0000'
       },
     },
   },
@@ -63,6 +75,7 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       display: 'flex',
+      flexGrow: 1,
     },
     appBar: {
       zIndex: theme.zIndex.drawer + 1,
@@ -121,6 +134,11 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     profile: {
       marginLeft: 'auto',
+    },
+    paper: {
+      padding: theme.spacing(2),
+      textAlign: 'center',
+      color: theme.palette.text.secondary,
     },
   }),
 );
@@ -258,29 +276,11 @@ export default function MiniDrawer() {
       </Drawer>
       <main className={classes.content}>
         <div className={classes.toolbar} />
-        <Typography paragraph>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
-          ut labore et dolore magna aliqua. Rhoncus dolor purus non enim praesent elementum
-          facilisis leo vel. Risus at ultrices mi tempus imperdiet. Semper risus in hendrerit
-          gravida rutrum quisque non tellus. Convallis convallis tellus id interdum velit laoreet id
-          donec ultrices. Odio morbi quis commodo odio aenean sed adipiscing. Amet nisl suscipit
-          adipiscing bibendum est ultricies integer quis. Cursus euismod quis viverra nibh cras.
-          Metus vulputate eu scelerisque felis imperdiet proin fermentum leo. Mauris commodo quis
-          imperdiet massa tincidunt. Cras tincidunt lobortis feugiat vivamus at augue. At augue eget
-          arcu dictum varius duis at consectetur lorem. Velit sed ullamcorper morbi tincidunt. Lorem
-          donec massa sapien faucibus et molestie ac.
-        </Typography>
-        <Typography paragraph>
-          Consequat mauris nunc congue nisi vitae suscipit. Fringilla est ullamcorper eget nulla
-          facilisi etiam dignissim diam. Pulvinar elementum integer enim neque volutpat ac
-          tincidunt. Ornare suspendisse sed nisi lacus sed viverra tellus. Purus sit amet volutpat
-          consequat mauris. Elementum eu facilisis sed odio morbi. Euismod lacinia at quis risus sed
-          vulputate odio. Morbi tincidunt ornare massa eget egestas purus viverra accumsan in. In
-          hendrerit gravida rutrum quisque non tellus orci ac. Pellentesque nec nam aliquam sem et
-          tortor. Habitant morbi tristique senectus et. Adipiscing elit duis tristique sollicitudin
-          nibh sit. Ornare aenean euismod elementum nisi quis eleifend. Commodo viverra maecenas
-          accumsan lacus vel facilisis. Nulla posuere sollicitudin aliquam ultrices sagittis orci a.
-        </Typography>
+        <Grid container spacing={3}>
+          <Grid item xs={12}>
+            <Paper className={classes.paper}> <MyDropZone /> </Paper>
+          </Grid>
+        </Grid>
       </main>
     </div>
   );

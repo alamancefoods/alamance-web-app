@@ -1,32 +1,29 @@
 import React, { useEffect } from 'react';
-import NewDash from './styles/NewDash'
-import { Home }from './Home'
-import Keycloak from 'keycloak-js';
-import { KeycloakProvider } from 'react-keycloak';
-const keycloak = (Keycloak as any)({
-    "realm": "master",
-    "clientId": "alamance-react-app",
-    "url": "https://afiauth.net/auth",
-    "ssl-required": "external",
-    "resource": "alamance-react-app",
-    "public-client": true,
-    "verify-token-audience": true,
-    "use-resource-role-mappings": true,
-    "confidential-port": 0
-})
-
-
+import DashBoard from './styles/Dashboard'
+import { useKeycloak } from 'react-keycloak';
+import { useDispatch, useStore, useSelector} from 'react-redux';
+import { addRole } from './redux/roles/actions'
 
 function App() {
+  const [keycloak, initialized] = useKeycloak();
+  const dispatch = useDispatch()
+  const store = useStore()
+  const roles = useSelector(state => state )
+  const userRoles: any = ['admin', 'human resources', 'operations', 'sales', 'analytics']
+
+  useEffect(() => {
+    if(keycloak.realmAccess){
+      for(let i = 0; i <= userRoles.length; i++){
+        if(keycloak.realmAccess.roles.includes(userRoles[i])){
+          dispatch(addRole(userRoles[i]))
+        }
+      }
+    }
+  }, [initialized])
+
+
   return (
-    <KeycloakProvider
-      keycloak={keycloak}
-      initConfig={{
-        onLoad: 'login-required'
-      }}
-    >
-      <NewDash />
-    </KeycloakProvider>
+        <DashBoard />
   )
 }
 

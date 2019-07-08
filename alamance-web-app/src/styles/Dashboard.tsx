@@ -1,35 +1,83 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
+import { useKeycloak } from 'react-keycloak';
 import clsx from 'clsx';
-import { createStyles, makeStyles, useTheme, Theme } from '@material-ui/core/styles';
-import CssBaseline from '@material-ui/core/CssBaseline';
+import {  createMuiTheme, createStyles, makeStyles, withStyles, useTheme, Theme } from '@material-ui/core/styles';
+import { ThemeProvider } from '@material-ui/styles'
+import Menu, { MenuProps } from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
+import Button from '@material-ui/core/Button'
 import Drawer from '@material-ui/core/Drawer';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
+import List from '@material-ui/core/List';
+import Paper from '@material-ui/core/Paper';
+import Grid from '@material-ui/core/Grid';
+import CssBaseline from '@material-ui/core/CssBaseline';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import Container from '@material-ui/core/Container';
-import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
 import HomeIcon from '@material-ui/icons/Home';
 import MultilineChartIcon from '@material-ui/icons/MultilineChart';
-import MonetizationOnIcon from '@material-ui/icons/MonetizationOn'
+import MonetizationOnIcon from '@material-ui/icons/MonetizationOn';
+import BusinessIcon from '@material-ui/icons/Business';
+import PeopleIcon from '@material-ui/icons/People';
 import SettingsIcon from '@material-ui/icons/Settings';
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+
 import MyDropZone from '../utils/fileHandler/MyDropZone'
 
 const drawerWidth = 240;
+
+const theme = createMuiTheme({
+  palette: {
+    primary: {main: '#ff0000'},
+    secondary: { main: '#ff0000'},
+  },
+})
+
+const StyledProfileMenu = withStyles({
+  paper: {
+    border: '1px solid #ff0000',
+  },
+})((props: MenuProps) => (
+  <Menu
+    elevation={0}
+    getContentAnchorEl={null}
+    anchorOrigin={{
+      vertical: 'bottom',
+      horizontal: 'center',
+    }}
+    transformOrigin={{
+      vertical: 'top',
+      horizontal: 'center',
+    }}
+    {...props}
+  />
+));
+
+const StyledProfileMenuItem = withStyles(theme => ({
+  root: {
+    '&:focus': {
+      backgroundColor: '#ff0000',
+      '& multiListItemIcon-root, & .MultiListItemText-primary': {
+        color: '#ff0000'
+      },
+    },
+  },
+}))(MenuItem);
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       display: 'flex',
+      flexGrow: 1,
     },
     appBar: {
       zIndex: theme.zIndex.drawer + 1,
@@ -82,20 +130,21 @@ const useStyles = makeStyles((theme: Theme) =>
       padding: '0 8px',
       ...theme.mixins.toolbar,
     },
-    paper: {
-      padding: theme.spacing(2),
-    },
     content: {
       flexGrow: 1,
       padding: theme.spacing(3),
     },
-    container: {
-      paddingTop: theme.spacing(4),
-      paddingBottom: theme.spacing(4),
+    profile: {
+      marginLeft: 'auto',
     },
-    fixedHeight: {
-      height: 240,
+    paper: {
+      padding: theme.spacing(2),
+      textAlign: 'center',
+      color: theme.palette.text.secondary,
     },
+    button: {
+      margin: theme.spacing(1)
+    }
   }),
 );
 
@@ -103,6 +152,9 @@ export default function MiniDrawer() {
   const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const roles = useSelector((state: any) => state.roleReducer.roles)
+  const [keycloak, initialized] = useKeycloak();
 
   function handleDrawerOpen() {
     setOpen(true);
@@ -112,7 +164,13 @@ export default function MiniDrawer() {
     setOpen(false);
   }
 
-  const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
+  function handleProfileClick(event: React.MouseEvent<HTMLElement>){
+    setAnchorEl(event.currentTarget);
+  }
+
+  function handleProfileClose() {
+    setAnchorEl(null);
+  }
 
   return (
     <div className={classes.root}>
@@ -123,7 +181,7 @@ export default function MiniDrawer() {
           [classes.appBarShift]: open,
         })}
       >
-        <Toolbar>
+        <Toolbar >
           <IconButton
             color="inherit"
             aria-label="Open drawer"
@@ -136,8 +194,29 @@ export default function MiniDrawer() {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap>
-            Mini variant drawer
+            AFI Technologies
           </Typography>
+          <div className={classes.profile}>
+            <Button
+              aria-controls="customized-menu"
+              aria-haspopup="true"
+              variant="contained"
+              color="primary"
+              onClick={handleProfileClick}
+            >
+              <AccountCircleIcon />
+            </Button>
+            <StyledProfileMenu
+              anchorEl={anchorEl}
+              keepMounted
+              open={Boolean(anchorEl)}
+              onClose={handleProfileClose}
+            >
+              <StyledProfileMenuItem>
+                <ListItemText primary="Logout" onClick={() => keycloak.logout()} />
+              </StyledProfileMenuItem>
+            </StyledProfileMenu>
+          </div>
         </Toolbar>
       </AppBar>
       <Drawer
@@ -161,31 +240,70 @@ export default function MiniDrawer() {
         </div>
         <Divider />
         <List>
-          <ListItem button >
-            <ListItemIcon> <HomeIcon /> </ListItemIcon>
+          <ListItem button>
+            <ListItemIcon>
+              <HomeIcon />
+            </ListItemIcon>
             <ListItemText primary="Home" />
           </ListItem>
+          {roles.includes('analytics')
+          ?
+           <ListItem button>
+             <ListItemIcon>
+               <MultilineChartIcon />
+             </ListItemIcon>
+             <ListItemText primary="Analytics" />
+           </ListItem>
+          : null
+          }
+          {roles.includes('sales')
+          ?
+           <ListItem button>
+             <ListItemIcon>
+               <MonetizationOnIcon />
+             </ListItemIcon>
+             <ListItemText primary="Sales" />
+           </ListItem>
+          : null
+          }
+          {roles.includes('operations')
+          ?
+           <ListItem button>
+             <ListItemIcon>
+               <BusinessIcon />
+             </ListItemIcon>
+             <ListItemText primary="Operations" />
+           </ListItem>
+          : null
+          }
+          {roles.includes('human resources')
+          ?
+           <ListItem button>
+             <ListItemIcon>
+               <PeopleIcon />
+             </ListItemIcon>
+             <ListItemText primary="Human Resources" />
+           </ListItem>
+          : null
+          }
         </List>
         <Divider />
+        <List>
+          <ListItem button>
+            <ListItemIcon>
+              <SettingsIcon />
+            </ListItemIcon>
+            <ListItemText primary="Settings" />
+          </ListItem>
+        </List>
       </Drawer>
       <main className={classes.content}>
-        <Container maxWidth="lg" className={classes.container}>
-          <Grid container spacing={3}>
-            <Grid item xs={12} md={8} lg={9}>
-              <Paper className={fixedHeightPaper}>
-                <MyDropZone />
-              </Paper>
-            </Grid>
-            <Grid item xs={12} md={4} lg={3}>
-              <Paper className={fixedHeightPaper}>
-              </Paper>
-            </Grid>
-            <Grid item xs={12}>
-              <Paper className={classes.paper}>
-              </Paper>
-            </Grid>
+        <div className={classes.toolbar} />
+        <Grid container spacing={3}>
+          <Grid item xs={12}>
+            <Paper className={classes.paper}> <MyDropZone /> </Paper>
           </Grid>
-        </Container>
+        </Grid>
       </main>
     </div>
   );

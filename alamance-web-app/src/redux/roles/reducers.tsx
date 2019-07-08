@@ -1,5 +1,4 @@
 import {
-  Role,
   RoleState,
   RoleActionTypes,
   ADD_ROLE
@@ -18,5 +17,7 @@ export function roleReducer(
       return {
         roles: [...state.roles, action.payload]
       }
+    default:
+      return state
   }
 }

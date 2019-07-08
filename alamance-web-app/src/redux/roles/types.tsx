@@ -1,16 +1,16 @@
 export const ADD_ROLE = 'ADD_ROLE'
 
 export interface Role {
-  role: string
+ role: string
 }
 
 export interface RoleState {
-  roles: Role[]
+  roles: string[]
 }
 
 interface AddRoleAction {
   type: typeof ADD_ROLE
-  payload: Role
+  payload: string
 }
 
 export type RoleActionTypes = AddRoleAction

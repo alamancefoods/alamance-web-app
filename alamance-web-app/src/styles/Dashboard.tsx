@@ -1,5 +1,6 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { pickService } from '../redux/services/actions'
 import { useKeycloak } from 'react-keycloak';
 import clsx from 'clsx';
 import {  createMuiTheme, createStyles, makeStyles, withStyles, useTheme, Theme } from '@material-ui/core/styles';
@@ -153,7 +154,9 @@ export default function MiniDrawer() {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const dispatch = useDispatch()
   const roles = useSelector((state: any) => state.roleReducer.roles)
+  const pickedService = useSelector((state: any) => state.serviceReducer.service)
   const [keycloak, initialized] = useKeycloak();
 
   function handleDrawerOpen() {
@@ -240,7 +243,7 @@ export default function MiniDrawer() {
         </div>
         <Divider />
         <List>
-          <ListItem button>
+          <ListItem button onClick={() => dispatch(pickService('home'))}>
             <ListItemIcon>
               <HomeIcon />
             </ListItemIcon>
@@ -248,7 +251,7 @@ export default function MiniDrawer() {
           </ListItem>
           {roles.includes('analytics')
           ?
-           <ListItem button>
+           <ListItem button onClick={() => dispatch(pickService('analytics'))}>
              <ListItemIcon>
                <MultilineChartIcon />
              </ListItemIcon>
@@ -258,7 +261,7 @@ export default function MiniDrawer() {
           }
           {roles.includes('sales')
           ?
-           <ListItem button>
+           <ListItem button onClick={() => dispatch(pickService('sales'))}>
              <ListItemIcon>
                <MonetizationOnIcon />
              </ListItemIcon>
@@ -268,7 +271,7 @@ export default function MiniDrawer() {
           }
           {roles.includes('operations')
           ?
-           <ListItem button>
+           <ListItem button onClick={() => dispatch(pickService('operations'))}>
              <ListItemIcon>
                <BusinessIcon />
              </ListItemIcon>
@@ -278,7 +281,7 @@ export default function MiniDrawer() {
           }
           {roles.includes('human resources')
           ?
-           <ListItem button>
+           <ListItem button onClick={() => dispatch(pickService('humanResources'))}>
              <ListItemIcon>
                <PeopleIcon />
              </ListItemIcon>
@@ -289,7 +292,7 @@ export default function MiniDrawer() {
         </List>
         <Divider />
         <List>
-          <ListItem button>
+          <ListItem button onClick={() => console.log(pickedService)}>
             <ListItemIcon>
               <SettingsIcon />
             </ListItemIcon>

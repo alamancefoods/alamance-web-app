@@ -1,3 +1,5 @@
+import { HOME } from '../../constants/servicesAndRoles'
+
 import {
   ServiceState,
   ServiceActionTypes,
@@ -5,7 +7,7 @@ import {
 } from './types'
 
 const initialState: ServiceState = {
-  service: "home"
+  service: HOME
 }
 
 export function serviceReducer(

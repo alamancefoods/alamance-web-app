@@ -42,8 +42,9 @@ function MyDropZone() {
          isDragActive ?
          <p>Drop your files here...</p> :
          <div>
-          <p>Drag & Drop your files here</p>
-          <p>Or click to select files.</p>
+          <h1>This is a Product Availability Parser</h1>
+          <h2>Drag & Drop your files here</h2>
+          <h2>Or click to select files.</h2>
          </div>
        }
      </div>

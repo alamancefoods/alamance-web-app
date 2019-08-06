@@ -3,8 +3,12 @@ import { useSelector, useDispatch } from 'react-redux';
 import { pickService } from '../../redux/services/actions'
 import { useKeycloak } from 'react-keycloak';
 import clsx from 'clsx';
-import MyDropZone from '../operations/paParser/MyDropZone'
 import { MenuProps } from '@material-ui/core/Menu'
+import { ServiceSwitch } from '../appTools/ServiceSwitch'
+
+import {
+  HOME, ANALYTICS, SALES, OPERATIONS, HUMAN_RESOURCES, SETTINGS
+} from '../../constants/servicesAndRoles'
 
 import {
   createStyles, makeStyles,
@@ -147,7 +151,6 @@ export default function MiniDrawer() {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const dispatch = useDispatch()
   const roles = useSelector((state: any) => state.roleReducer.roles)
-  const pickedService = useSelector((state: any) => state.serviceReducer.service)
   const [keycloak] = useKeycloak();
 
   function handleDrawerOpen() {
@@ -234,15 +237,15 @@ export default function MiniDrawer() {
         </div>
         <Divider />
         <List>
-          <ListItem button onClick={() => dispatch(pickService('home'))}>
+          <ListItem button onClick={() => dispatch(pickService(HOME))}>
             <ListItemIcon>
               <HomeIcon />
             </ListItemIcon>
             <ListItemText primary="Home" />
           </ListItem>
-          {roles.includes('analytics')
+          {roles.includes(ANALYTICS)
           ?
-           <ListItem button onClick={() => dispatch(pickService('analytics'))}>
+           <ListItem button onClick={() => dispatch(pickService(ANALYTICS))}>
              <ListItemIcon>
                <MultilineChartIcon />
              </ListItemIcon>
@@ -250,9 +253,9 @@ export default function MiniDrawer() {
            </ListItem>
           : null
           }
-          {roles.includes('sales')
+          {roles.includes(SALES)
           ?
-           <ListItem button onClick={() => dispatch(pickService('sales'))}>
+           <ListItem button onClick={() => dispatch(pickService(SALES))}>
              <ListItemIcon>
                <MonetizationOnIcon />
              </ListItemIcon>
@@ -260,9 +263,9 @@ export default function MiniDrawer() {
            </ListItem>
           : null
           }
-          {roles.includes('operations')
+          {roles.includes(OPERATIONS)
           ?
-           <ListItem button onClick={() => dispatch(pickService('operations'))}>
+           <ListItem button onClick={() => dispatch(pickService(OPERATIONS))}>
              <ListItemIcon>
                <BusinessIcon />
              </ListItemIcon>
@@ -270,9 +273,9 @@ export default function MiniDrawer() {
            </ListItem>
           : null
           }
-          {roles.includes('human resources')
+          {roles.includes(HUMAN_RESOURCES)
           ?
-           <ListItem button onClick={() => dispatch(pickService('humanResources'))}>
+           <ListItem button onClick={() => dispatch(pickService(HUMAN_RESOURCES))}>
              <ListItemIcon>
                <PeopleIcon />
              </ListItemIcon>
@@ -283,7 +286,7 @@ export default function MiniDrawer() {
         </List>
         <Divider />
         <List>
-          <ListItem button onClick={() => console.log(pickedService)}>
+          <ListItem button onClick={() => dispatch(pickService(SETTINGS))}>
             <ListItemIcon>
               <SettingsIcon />
             </ListItemIcon>
@@ -295,7 +298,7 @@ export default function MiniDrawer() {
         <div className={classes.toolbar} />
         <Grid container spacing={3}>
           <Grid item xs={12}>
-            <Paper className={classes.paper}> <MyDropZone /> </Paper>
+            <Paper className={classes.paper}> <ServiceSwitch /> </Paper>
           </Grid>
         </Grid>
       </main>

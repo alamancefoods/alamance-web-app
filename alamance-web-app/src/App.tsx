@@ -1,14 +1,12 @@
 import React, { useEffect } from 'react';
-import DashBoard from './styles/Dashboard'
+import DashBoard from './components/materials/Dashboard'
 import { useKeycloak } from 'react-keycloak';
-import { useDispatch, useStore, useSelector} from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { addRole } from './redux/roles/actions'
 
 function App() {
   const [keycloak, initialized] = useKeycloak();
   const dispatch = useDispatch()
-  const store = useStore()
-  const roles = useSelector(state => state )
   const userRoles: any = ['admin', 'human resources', 'operations', 'sales', 'analytics']
 
   useEffect(() => {
@@ -19,7 +17,7 @@ function App() {
         }
       }
     }
-  }, [initialized])
+  }, [initialized, dispatch, keycloak.realmAccess, userRoles])
 
 
   return (

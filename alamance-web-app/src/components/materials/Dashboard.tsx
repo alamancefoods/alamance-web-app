@@ -1,47 +1,38 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { pickService } from '../redux/services/actions'
+import { pickService } from '../../redux/services/actions'
 import { useKeycloak } from 'react-keycloak';
 import clsx from 'clsx';
-import {  createMuiTheme, createStyles, makeStyles, withStyles, useTheme, Theme } from '@material-ui/core/styles';
-import { ThemeProvider } from '@material-ui/styles'
-import Menu, { MenuProps } from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
-import Button from '@material-ui/core/Button'
-import Drawer from '@material-ui/core/Drawer';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import List from '@material-ui/core/List';
-import Paper from '@material-ui/core/Paper';
-import Grid from '@material-ui/core/Grid';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import Typography from '@material-ui/core/Typography';
-import Divider from '@material-ui/core/Divider';
-import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import HomeIcon from '@material-ui/icons/Home';
-import MultilineChartIcon from '@material-ui/icons/MultilineChart';
-import MonetizationOnIcon from '@material-ui/icons/MonetizationOn';
-import BusinessIcon from '@material-ui/icons/Business';
-import PeopleIcon from '@material-ui/icons/People';
-import SettingsIcon from '@material-ui/icons/Settings';
-import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import MyDropZone from '../operations/paParser/MyDropZone'
+import { MenuProps } from '@material-ui/core/Menu'
 
-import MyDropZone from '../utils/fileHandler/MyDropZone'
+import {
+  createStyles, makeStyles,
+  withStyles, useTheme, Theme
+} from '@material-ui/core/styles';
+
+import {
+  IconButton, Divider, Typography, CssBaseline,
+  Grid, Paper, List, Toolbar, AppBar, Drawer, Button,
+  MenuItem, ListItem, ListItemText, ListItemIcon, Menu
+} from '@material-ui/core'
+
+import  {
+  Menu as MenuIcon,
+  ChevronLeft as ChevronLeftIcon,
+  ChevronRight as ChevronRightIcon,
+  MultilineChart as MultilineChartIcon,
+  MonetizationOn as MonetizationOnIcon,
+  Business as BusinessIcon,
+  People as PeopleIcon,
+  Settings as SettingsIcon,
+  AccountCircle as AccountCircleIcon,
+  Home as HomeIcon
+} from '@material-ui/icons';
+// END OF IMPORTS
+
 
 const drawerWidth = 240;
-
-const theme = createMuiTheme({
-  palette: {
-    primary: {main: '#ff0000'},
-    secondary: { main: '#ff0000'},
-  },
-})
 
 const StyledProfileMenu = withStyles({
   paper: {
@@ -157,7 +148,7 @@ export default function MiniDrawer() {
   const dispatch = useDispatch()
   const roles = useSelector((state: any) => state.roleReducer.roles)
   const pickedService = useSelector((state: any) => state.serviceReducer.service)
-  const [keycloak, initialized] = useKeycloak();
+  const [keycloak] = useKeycloak();
 
   function handleDrawerOpen() {
     setOpen(true);

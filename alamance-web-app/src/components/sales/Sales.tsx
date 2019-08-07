@@ -1,11 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useFetch } from '../../utils/hooks/fetchHooks'
+import { orderListRequest } from '../../utils/popshopRequests/orderListRequest'
 
 const Sales= () => {
+  const response = useFetch(orderListRequest.concat('?postalCode=38495'));
+
   return(
     <>
-      <h1>You were promised functionality in the Sales section.</h1>
-      <h2>Clearly there is none!</h2>
-      <h3>You've been lied to...</h3>
+      <button onClick={() => console.log(response)}>Click Me!</button>
     </>
   )
 }

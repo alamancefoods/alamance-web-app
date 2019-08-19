@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { PaForm } from './PaForm'
-import { paDeficitRequest } from '../../../utils/pallasRequests/paDeficitRequest'
+import { gatewayPAAddress } from '../../../utils/pallasRequests/paDeficitRequest'
 import { fileUpload } from './fileUpload'
 import { useKeycloak } from 'react-keycloak';
 
@@ -36,7 +36,7 @@ export const PaContainer = (
   const DownloadList = ({files} : {files: string[]}) => {
     const downloadList = files.map((fileName) =>
       <div>
-        <a href = {paDeficitRequest.concat(`/${fileName}`)}>{fileName}</a>
+        <a href = {gatewayPAAddress.concat(`/${fileName}`)}>{fileName}</a>
       </div>
     )
     return(
@@ -47,15 +47,15 @@ export const PaContainer = (
   const handleUpload = () => {
     setIsDownloaded(isDownloaded => !isDownloaded)
     setIsLoading(isloading => !isLoading)
-    let request: string = paDeficitRequest
+    let request: string = gatewayPAAddress
     switch(timeDeltas.length) {
       case 0:
         break;
       case 1:
-        request = paDeficitRequest.concat(`?delta=${timeDeltas[0]}`)
+        request = gatewayPAAddress.concat(`?delta=${timeDeltas[0]}`)
         break;
       default:
-        request =paDeficitRequest.concat(`?delta=${timeDeltas[0]}`)
+        request =gatewayPAAddress.concat(`?delta=${timeDeltas[0]}`)
         timeDeltas.slice(1).forEach(function(delta){
           request = request.concat(`&delta=${delta}`)
         });

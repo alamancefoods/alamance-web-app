@@ -5,31 +5,21 @@ import {useDropzone} from 'react-dropzone'
 function MyDropZone() {
   const [allFileNames, setAllFileNames] = useState<Array<string>>([])
   const [upFiles, setUpFiles] = useState<Array<File>>([])
+  const [isConfused, setConfusion] = useState(false)
 
   const onDrop = useCallback(acceptedFiles => {
     setUpFiles(upFiles => upFiles.concat(acceptedFiles))
   }, [])
 
 
-  const {getRootProps, getInputProps, isDragActive} =  useDropzone({onDrop})
+  const {getRootProps, getInputProps, isDragActive} =  useDropzone({
+    onDrop,
+    accept: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+  })
 
 
   const dateExtractor = (input: string) => {
-    const dotDateRe = /\d+\.\d+\.\d+/
-    let myMatch: RegExpMatchArray | null
-    while((myMatch = input.match(dotDateRe)) != null){
-      const datePull = myMatch[0]
-      const utcDate = Date.parse(datePull)
-      const baseDate = new Date(utcDate)
-      const dateOptions = {
-        weekday: 'long',
-        year: 'numeric',
-        day: 'numeric',
-        month: 'long'
-      }
-      const intlDate = new Intl.DateTimeFormat('en-US', dateOptions).format(baseDate)
-      return intlDate
-    }
+    return input
   }
 
 
@@ -45,6 +35,7 @@ function MyDropZone() {
           <h1>This is a Product Availability Parser</h1>
           <h2>Drag & Drop your files here</h2>
           <h2>Or click to select files.</h2>
+          <h6>Only Submit 'xlsx' files. All other file types will be rejected.</h6>
          </div>
        }
      </div>
@@ -73,8 +64,29 @@ function MyDropZone() {
       })
     : null
     }
+    {
+   isConfused
+   ? upFiles.length
+   ? <div>
+        <p>
+          Now that you've submitted your files for processing, you need to enter some date ranges.
+          If you want to determine product availability deficits 12 days out, enter '12' into the input field above.
+          You can add additional values if you want to determine deficits for more ranges, after which you would click 'submit'.
+          After clicking submit, sit tight and wait a few seconds for the processed files to become available for download.
+          If the download links don't appear, reach out to 'hunter.templeman@alamancefoods.com'
+        </p>
+      <button onClick={() => setConfusion(false)}>I'm not confused...</button>
+     </div>
+   : <div>
+      <p>
+        to submit files for processing, either click on the dropzone above or drag a file of your choosing into the dropzone.
+        Only 'xlsx' files will be accepted.
+      </p>
+      <button onClick={() => setConfusion(false)}>I'm not confused...</button>
     </div>
-
+   : <button onClick={() => setConfusion(true)}>I'm confused...</button>
+    }
+    </div>
   )
 }
 
